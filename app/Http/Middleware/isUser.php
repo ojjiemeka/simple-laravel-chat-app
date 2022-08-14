@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class isUser
 {
@@ -19,16 +20,28 @@ class isUser
     {
         // return $next($request);
         if(Auth::check()){
-            if(Auth::user()->role === 1){
+            if(Auth::user()->status === 'active'){
                 return $next($request);
             }
-            // return false;
+            return false;
             // echo Auth::user();
-            echo "error here";
+        //     Session::flash('error', 'Please Hold..Account is being verified');
+        //     Session::flash('alert-class', 'alert-danger');
+        // return redirect('/login')->withErrors([
+        //     'isSuccess' => true,
+        //     'message' => "Please Hold..Account is being verified"
+        // ], 200);
         }
+
     else{
         $this->guard()->logout();
         return redirect('/login');
+        // Session::flash('error', 'Please Hold..Account is being verified');
+        //     Session::flash('alert-class', 'alert-danger');
+        // return redirect('/login')->withErrors([
+        //     'isSuccess' => true,
+        //     'message' => "Please Hold..Account is being verified"
+        // ], 200);
 
     }
 

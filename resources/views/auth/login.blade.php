@@ -1,13 +1,18 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Admin Login') }}</div>
+                <div class="card-header">{{ __('User Login') }}</div>
 
                 <div class="card-body">
+
+                    {{-- <div>
+                        @include('inc.error')
+                    </div> --}}
+
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 

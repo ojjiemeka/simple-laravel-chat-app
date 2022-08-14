@@ -66,7 +66,7 @@ class AuthController extends Controller
             if(Auth::check() && Auth::user()->role === 'admin'){
                  Session::flash('success', 'Welcome Admin');
                 Session::flash('alert-class', 'alert-success');
-                return redirect('chats')->withErrors([
+                return redirect('/dashboard')->withErrors([
                     'isSuccess' => true,
                     'message' => "Welcome Admin"
                 ], 200);
@@ -113,6 +113,21 @@ class AuthController extends Controller
         // }
 
     }
+
+    protected function dashboard (Request $request){
+        $users = User::where('role', 'user')
+        ->get();
+
+        $number = 1;
+
+
+        return view('admin.dashboard', [
+            'users' => $users,
+            'number' => $number
+        ]);
+    }
+
+
 
     public function logout(Request $request){
         /** @var \App\Models\MyUserModel $user **/

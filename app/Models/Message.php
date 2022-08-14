@@ -11,8 +11,10 @@ class Message extends Model
     use HasFactory;
 
     protected $fillable = [
-        'body',
+        'message',
         'user_id',
+        'to',
+        'from',
     ];
 
     protected $appends = ['selfMessage'];

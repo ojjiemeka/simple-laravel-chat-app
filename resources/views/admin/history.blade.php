@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -13,28 +13,26 @@
                                 <thead class="table-light">
                                     <tr class="text-muted">
                                         <th class="text-uppercase text-center">#</th>
-                                        {{-- <th class="text-uppercase text-center">Name</th> --}}
+                                        <th class="text-uppercase text-center">Name</th>
                                         <th class="text-uppercase text-center">Message</th>
                                         <th class="text-uppercase text-center">Time</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    @if ($datas->count())
-                                    @foreach ($datas as $user)
+                                    @if ($items->count())
+                                    @foreach ($items as $user)
                                         <tr data-id="1">
                                             <td data-field="id">{{ $number++ }}</td>
 
-                                            {{-- <td data-field="name"> {{ $user->name }}</td> --}}
+                                            <td data-field="name"> {{ $user->name }}</td>
                                             <td data-field="email">{{ $user->message }}</td>
                                             <td data-field="phome">{{ $user->created_at}}</td>
                                             <td data-field="status">
                                         </tr>
                                     @endforeach
                                     @else
-                                            <tr class="text-uppercase fs-5 text-center">
-                                                <td>no record found</td>
-                                            </tr>
+                                            <th class="text-uppercase fs-5 text-center">no record found</th>
                                         @endif
                                 </tbody><!-- end tbody -->
                             </table><!-- end table -->

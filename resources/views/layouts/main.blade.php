@@ -55,13 +55,9 @@
                                 </li>
                             @endif
                         @else
-                            <li class="align-items-center d-flex nav-item mx-3">
+                            {{-- <li class="align-items-center d-flex nav-item mx-3">
                                 <a href="/dashboard">Users</a>
-                            </li>
-
-                            <li class="align-items-center d-flex nav-item mx-3">
-                                <a href="/history">History</a>
-                            </li>
+                            </li> --}}
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -69,6 +65,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('home') }}">
+                                     {{ __('Home') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('message') }}">
+                                     {{ __('Send Message') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

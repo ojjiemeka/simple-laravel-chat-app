@@ -14,7 +14,8 @@
                         </div>
                     </div>
                    <div>
-                    <form class="form">
+                    <form class="form" action="{{ route('chats.store', $user->id) }}" method="POST">
+                        @csrf
                           <div class="mb-3">
                             <label for="exampleFormControlTextarea1" class="form-label">Message</label>
                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>

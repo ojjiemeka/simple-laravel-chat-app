@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Admin\ChatController;
+use App\Http\Controllers\admin\PageController;
+use App\Http\Controllers\admin\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,17 +26,23 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Route::middleware(['isUser'])->group(function () {
+//     Route::get('/home', [HomeController::class, 'index'])->name('home');
+// });
 
-Route::get('/message', [MessageController::class, 'index'])->name('message');
-Route::get('/admin', [AuthController::class, 'index'])->name('admin-login');
-Route::post('/admin-login', [AuthController::class, 'login'])->name('admin');
-// Route::get('/message', [MessageController::class, 'index'])->name('me');
-// Route::resource('admins', App\Http\Controllers\Admin\adminLoginController::class);
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/message', [HomeController::class, 'message'])->name('message');
+Route::post('/send-message', [HomeController::class, 'sendMessage'])->name('send-message');
+
+
+// Route::get('/message', [MessageController::class, 'index'])->name('message');
+Route::get('/admin', [AuthController::class, 'index'])->name('admin');
+Route::post('/admin-login', [AuthController::class, 'login'])->name('admin-login');
 
 Route::middleware(['isAdmin'])->group(function () {
-    // Route::get('/chat', [ChatController::class, 'chat'])->name('chat');
-    // Route::get('/users', [ChatController::class, 'getUser'])->name('user');
-Route::resource('chats', ChatController::class);
+    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    Route::get('/history', [PageController::class, 'getHistory'])->name('history');
+    Route::resource('chats', ChatController::class);
+    Route::resource('users', UserController::class);
 
 });

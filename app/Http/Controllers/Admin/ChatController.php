@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    public function getUser(): Collection
+    public function getUsers(): Collection
     {
         $response = [
             'message' => "it works"
@@ -21,6 +22,15 @@ class ChatController extends Controller
         ->get();
     }
 
+    // public function getUserMessages($id): Collection
+    // {
+    //     $user = User::find($id);
+
+    //     return User::where('id', $user)
+    //     // ->first();
+    //     ->get();
+    // }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +38,7 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $getUsers = $this->getUser();
+        $getUsers = $this->getUsers();
 
         return view('admin.chat', [
             'users' => $getUsers
@@ -50,10 +60,32 @@ class ChatController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * @param  int  $id
+     *
      */
-    public function store(Request $request)
+    public function store(Request $request )
     {
-        //
+        $this->validate($request, [
+            'message' => ['required', 'string', 'max:255'],
+        ]);
+
+        $id = $request->input('user_id');
+
+        $myID = Auth::user()->id;
+
+
+        // $user = User::find($id);
+        $sql = new Message();
+        $sql->message = $request->input('message');
+        $sql->user_id = $myID;
+        $sql->sender = 'admin';
+        $sql->reciever = $request->input('user_id');
+
+        $sql->save();
+
+        // echo $sql;
+
+        return $this->show($id);
     }
 
     /**
@@ -64,9 +96,25 @@ class ChatController extends Controller
      */
     public function show($id)
     {
-        $users = User::find($id);
 
-        echo $users;
+        $user = User::find($id);
+
+        $data = User::join('messages', 'users.id', '=', 'messages.user_id')
+        ->where('users.id', '=', $id)
+        ->get(['users.*', 'messages.message', 'messages.created_at']);
+
+        $adminMessage = User::join('messages', 'users.id', '=', 'messages.reciever')
+        ->where('messages.reciever', '=', $id)
+        ->get(['messages.*']);
+
+        // echo $adminMessage;
+        // echo $data;
+
+        return view('admin.show', [
+            'messages' => $data,
+            'user' => $user,
+            'admins' => $adminMessage
+        ]);
 
     }
 
