@@ -18,14 +18,13 @@ class isAdmin
     public function handle(Request $request, Closure $next)
     {
         // return $next($request);
-        if(Auth::check() && Auth::user()->role == 'admin'){
-            return $next($request);
-    }
-    else{
-        $this->guard()->logout();
-        return redirect('/admin');
+        if(Auth::user()->role !== 'admin'){
+            $this->guard()->logout();
+            return redirect('/admin');
+        }
 
-    }
+        return $next($request);
+
     }
 
     /**

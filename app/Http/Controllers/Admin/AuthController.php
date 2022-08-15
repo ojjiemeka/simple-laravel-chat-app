@@ -38,16 +38,11 @@ class AuthController extends Controller
         $user->role = "admin";
         $user->status = "active";
         // $user->created_at = $now;
-        // $user->save();
+        $user->save();
 
         $message = 'User Created';
 
-        $response = [
-            'message' => $message,
-            'user' => $user,
-        ];
-
-        return response($response, 200);
+        return redirect('/login');
 
         // echo $input;
 
@@ -84,34 +79,6 @@ class AuthController extends Controller
 
         }
 
-        // CHECK CREDENTIALS
-        // if(Auth::attempt($credentials)){
-        //     if(Auth::user()->role == 'admin'){
-        //         // the next line must be addeded
-        //     /** @var \App\Models\MyUserModel $user **/
-        //       $user = Auth::user();
-
-        //         //   $token = $user->createToken('app_token')->plainTextToken;
-
-        //           $response = [
-        //               'user' => $user,
-        //             //   'token' => $token,
-        //               'message' => 'Signin Succeccful'
-
-        //           ];
-
-        //               echo response($response, 200);
-
-        //   }else{
-
-        //       $response = [
-        //           'message' => 'Bad Credentials'
-        //       ];
-
-        //   echo response($response, 401);
-        //     }
-        // }
-
     }
 
     protected function dashboard (Request $request){
@@ -127,25 +94,4 @@ class AuthController extends Controller
         ]);
     }
 
-
-
-    public function logout(Request $request){
-        /** @var \App\Models\MyUserModel $user **/
-        // the next line must be addeded
-        $user = Auth::user();
-
-        // Revoke and delete all tokens...
-        $user->tokens()->delete();
-
-        // echo $user;
-
-        $response = [
-            'message' => 'Logged Out'
-        ];
-
-        return response($response, 200);
-
-
-
-    }
 }

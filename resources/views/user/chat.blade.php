@@ -5,21 +5,23 @@
     <div class="row justify-content-center">
         <div class="col-md-8 mb-4">
             <div class="card">
-                <div class="card-header">Chats</div>
+                <div class="card-header">User Chat</div>
                 <div class="card-body">
                     <div class="container mb-5 message-body">
-                        @foreach ($datas as $data)
-                        <div class="self mb-3">
-                            <strong class="user">{{$user->name}}</strong>
-                            <p class="body">{{$data->message}}</p>
-                        </div>
-                        @endforeach
+                        @foreach ($messages as $item)
+                            @if ($item->sender == Auth::user()->id)
+                                <div class="self mb-3">
+                                    <strong class="user">{{Auth::user()->name}}</strong>
+                                    <p class="body">{{$item->message}}</p>
+                                </div>
+                            @endif
 
-                        @foreach ($admins as $item)
-                        <div class="message mb-2">
-                            <strong class="user">Admin</strong>
-                            <p class="body">{{$item->message}}</p>
-                        </div>
+                            @if ($item->sender === 'admin')
+                            <div class="message mb-3">
+                                <strong class="user">Admin</strong>
+                                <p class="body">{{$item->message}}</p>
+                            </div>
+                            @endif
                         @endforeach
                     </div>
                    <div>

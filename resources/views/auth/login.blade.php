@@ -9,9 +9,9 @@
 
                 <div class="card-body">
 
-                    {{-- <div>
+                    <div>
                         @include('inc.error')
-                    </div> --}}
+                    </div>
 
                     <form method="POST" action="{{ route('login') }}">
                         @csrf

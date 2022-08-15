@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    public function getUsers(): Collection
-    {
-        $response = [
-            'message' => "it works"
-        ];
-
-        return User::where('role', 'user')
-        // ->first();
-        ->get();
-    }
 
     public function getUserInfo(){
         $userInfo = Auth::user();
@@ -28,37 +18,14 @@ class ChatController extends Controller
         return $userInfo;
     }
 
-    public function getAdminMessage($id){
-        // $user = User::find($id);
-
-        // $adminMessage = User::join('messages', 'users.id', '=', 'messages.reciever')
-        // ->where('messages.reciever', '=', $id)
-        // ->get(['messages.*']);
-
-
-        $adminMessage = Message::find($id)->where('messages.reciever', '=', $id)->get();
-
-
-        return $adminMessage;
-    }
-
     public function getUserMessage($id){
-        // $user = User::find($id);
 
-         // $data = User::join('messages', 'users.id', '=', 'messages.user_id')
-        // ->where('users.id', '=', $id)
-        // ->get(['users.*', 'messages.message', 'messages.created_at']);
-
-        // $data = Message::find($id)->where('user_id', '=', $id)->get();
-
-        $data = Message::find($id)
-                    ->join('users', 'users.id', '=', 'messages.user_id')
-                    ->where('user_id', '=', $id)
-                    ->get();
-
-
+        $data = Message::where('user_id', $id)
+                ->oldest()
+                ->get();
 
         return $data;
+        // dd($data);
     }
 
     /**
@@ -68,11 +35,7 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $getUsers = $this->getUsers();
 
-        return view('admin.chat', [
-            'users' => $getUsers
-        ]);
     }
 
     /**
@@ -101,21 +64,16 @@ class ChatController extends Controller
 
         $id = $request->input('user_id');
 
-        $myID = Auth::user()->id;
-
-
-        // $user = User::find($id);
         $sql = new Message();
         $sql->message = $request->input('message');
-        $sql->user_id = $myID;
+        $sql->user_id = $request->input('user_id');
         $sql->sender = 'admin';
         $sql->reciever = $request->input('user_id');
-
         $sql->save();
 
         // echo $sql;
 
-        return $this->show($id);
+        return redirect()->route('chats.show', [$id]);
     }
 
     /**
@@ -129,20 +87,14 @@ class ChatController extends Controller
 
         $user = User::find($id);
 
-        // $data = Message::find($id)->where('user_id', '=', $id)->get();
-        $data = $this->getUserMessage($id);
+        $message = $this->getUserMessage($id);
 
-
-        // $adminMessage = Message::find($id)->where('messages.reciever', '=', $id)->get();
-        $adminMessage= $this->getAdminMessage($id);
-
-        // echo $adminMessage;
-        // echo $data;
+        // echo $message;
+        // echo $user->id;
 
         return view('admin.show', [
-            'messages' => $data,
+            'messages' => $message,
             'user' => $user,
-            'admins' => $adminMessage
         ]);
 
     }

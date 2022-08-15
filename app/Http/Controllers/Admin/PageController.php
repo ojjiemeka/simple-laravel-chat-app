@@ -14,11 +14,6 @@ class PageController extends Controller
     {
         $number = 1;
 
-        // $data = Message::all();
-
-        // $data = User::join('messages', 'users.id', '=', 'messages.user_id')
-        // ->get(['users.*', 'messages.message', 'messages.created_at']);
-
         $data =  DB::table('messages')
         ->select(
         'messages.message',

@@ -21,16 +21,18 @@
 
                                 <tbody>
                                     @if ($datas->count())
-                                    @foreach ($datas as $user)
-                                        <tr data-id="1">
-                                            <td data-field="id">{{ $number++ }}</td>
+                                        @foreach ($datas as $user)
+                                            @if ($user->sender == Auth::user()->id)
 
-                                            {{-- <td data-field="name"> {{ $user->name }}</td> --}}
-                                            <td data-field="email">{{ $user->message }}</td>
-                                            <td data-field="phome">{{ $user->created_at}}</td>
-                                            <td data-field="status">
-                                        </tr>
-                                    @endforeach
+                                            <tr data-id="1">
+                                                <td data-field="id">{{ $number++ }}</td>
+                                                {{-- <td data-field="name"> {{ $user->name }}</td> --}}
+                                                <td data-field="email">{{ $user->message }}</td>
+                                                <td data-field="phome">{{ $user->created_at}}</td>
+                                                <td data-field="phome">{{ $user->sender}}</td>
+                                            </tr>
+                                            @endif
+                                        @endforeach
                                     @else
                                             <tr class="text-uppercase fs-5 text-center">
                                                 <td>no record found</td>

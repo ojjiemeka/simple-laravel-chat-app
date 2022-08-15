@@ -8,11 +8,14 @@
                 <div class="align-items-center card-header d-flex justify-content-between">
                     <p>Users</p>
                     <a href="/history">
-                        <i class='bx bxs-message-dots bx-sm' ></i>
+                        <i class='bx bx-history bx-sm' ></i>
                     </a>
                 </div>
                 <div class="card-body">
                     <div class="container mb-5 text-center">
+                        <div class="mb-3">
+                            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                        </div>
                         <div class="table-responsive table-card">
                             <table class="table table-borderless table-hover table-nowrap align-middle mb-0">
                                 <thead class="table-light">
@@ -26,7 +29,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="myTable">
                                     @if ($users->count())
                                     @foreach ($users as $user)
                                         <tr data-id="1">
@@ -83,9 +86,21 @@
                             </div>
                         </div>
                     </div>
+                    <script>
+                        $(document).ready(function(){
+                          $("#myInput").on("keyup", function() {
+                            var value = $(this).val().toLowerCase();
+                            $("#myTable tr").filter(function() {
+                              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                            });
+                          });
+                        });
+                        </script>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 @endsection

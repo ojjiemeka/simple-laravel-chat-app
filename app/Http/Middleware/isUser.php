@@ -19,31 +19,28 @@ class isUser
     public function handle(Request $request, Closure $next)
     {
         // return $next($request);
-        if(Auth::check()){
-            if(Auth::user()->status === 'active'){
-                return $next($request);
-            }
-            return false;
-            // echo Auth::user();
-        //     Session::flash('error', 'Please Hold..Account is being verified');
-        //     Session::flash('alert-class', 'alert-danger');
-        // return redirect('/login')->withErrors([
-        //     'isSuccess' => true,
-        //     'message' => "Please Hold..Account is being verified"
-        // ], 200);
+        if(!Auth::check()){
+            return redirect('/login');
         }
 
-    else{
-        $this->guard()->logout();
-        return redirect('/login');
-        // Session::flash('error', 'Please Hold..Account is being verified');
-        //     Session::flash('alert-class', 'alert-danger');
-        // return redirect('/login')->withErrors([
-        //     'isSuccess' => true,
-        //     'message' => "Please Hold..Account is being verified"
-        // ], 200);
+        if(Auth::user()->role !== 'user'){
+            Auth::logout();
+            return redirect('/admin');
+        }
 
-    }
+        if(Auth::user()->status !== 'active'){
+            Auth::logout();
+            Session::flash('error', 'Please Hold..Account is being verified');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('/login')->withErrors([
+                    'isSuccess' => true,
+                    'message' => "Please Hold..Account is being verified"
+                ], 200);
+
+        }
+
+        return $next($request);
+
 
     }
 

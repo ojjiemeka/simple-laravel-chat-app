@@ -5,27 +5,26 @@
     <div class="row justify-content-center">
         <div class="col-md-8 mb-4">
             <div class="card">
-                <div class="card-header">Chats</div>
+                <div class="card-header">Admin Chat</div>
                 <div class="card-body">
                     <div class="container mb-5 mt-2 message-body">
+
                         @foreach ($messages as $item)
-                        <div class="message  mb-3">
-                            <strong class="user">{{$item->name}}</strong>
-                            <p class="body">{{$item->message}}</p>
-                        </div>
-                        @endforeach
+                            @if ($item->sender == $user->id)
+                            <div class="message mb-3">
+                                <strong class="user">{{$user->name}}</strong>
+                                <p class="body">{{$item->message}}</p>
+                            </div>
+                            @endif
 
-                        @foreach ($admins as $item)
-                        <div class="self mb-2">
-                            <strong class="user">{{Auth::user()->name}}</strong>
-                            <p class="body">{{$item->message}}</p>
-                        </div>
-                        @endforeach
+                            @if ($item->sender == 'admin')
+                            <div class="self mb-3">
+                                <strong class="user">Admin</strong>
+                                <p class="body">{{$item->message}}</p>
+                            </div>
+                            @endif
 
-                        {{-- <div class="self">
-                            <strong class="user">{{Auth::user()->name}}</strong>
-                            <p class="body">{{$admins->message}}</p>
-                        </div> --}}
+                        @endforeach
                     </div>
                    <div>
                     <form class="form" action="{{ route('chats.store') }}" method="POST">

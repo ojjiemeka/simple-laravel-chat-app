@@ -34,9 +34,10 @@ class HomeController extends Controller
     }
 
     public function getUserMessage(){
-        $userInfo = Auth::user();
-        $userID = $userInfo->id;
-        $data = Message::find($userID)->where('user_id', '=', $userID)->get();
+        // $data = Auth::user()->id;
+        // $userID = $userInfo->id;
+
+        $data = Message::where('user_id', '=', Auth::user()->id)->get();
 
         return $data;
 
@@ -69,17 +70,14 @@ class HomeController extends Controller
 
         // echo $userInfo;
 
-        $data = Message::find($userInfo->id)->where('user_id', '=', $userInfo->id)->get();
+        $message = Message::where('user_id', '=', $userInfo->id)->oldest()->get();
 
-        $adminMessage = Message::find($userInfo->id)->where('messages.reciever', '=', $userInfo->id)->get();
-
-        // echo $adminMessage;
+        // echo $userMessage;
 
         return view('user.chat',[
             'user' => $userInfo,
-            'datas' => $data,
+            'messages' => $message,
             'number' => $number,
-            'admins' => $adminMessage
         ]);
     }
 
@@ -102,7 +100,7 @@ class HomeController extends Controller
 
         // echo $sql;
 
-        return $this->message();
+        return redirect('/message');
 
     }
 
