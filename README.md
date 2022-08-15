@@ -44,7 +44,9 @@ http://127.0.0.1:8000/ is the default homepage
 ## Usage <a name = "usage"></a>
 
 User Email: ficed@mailinator.com
+```
 User Password: aaaaaaaa
 
 Admin Email: soqopyhoq@mailinator.com
+```
 Admin Password: aaaaaaaa
