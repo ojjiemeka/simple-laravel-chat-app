@@ -22,14 +22,44 @@ class ChatController extends Controller
         ->get();
     }
 
-    // public function getUserMessages($id): Collection
-    // {
-    //     $user = User::find($id);
+    public function getUserInfo(){
+        $userInfo = Auth::user();
 
-    //     return User::where('id', $user)
-    //     // ->first();
-    //     ->get();
-    // }
+        return $userInfo;
+    }
+
+    public function getAdminMessage($id){
+        // $user = User::find($id);
+
+        // $adminMessage = User::join('messages', 'users.id', '=', 'messages.reciever')
+        // ->where('messages.reciever', '=', $id)
+        // ->get(['messages.*']);
+
+
+        $adminMessage = Message::find($id)->where('messages.reciever', '=', $id)->get();
+
+
+        return $adminMessage;
+    }
+
+    public function getUserMessage($id){
+        // $user = User::find($id);
+
+         // $data = User::join('messages', 'users.id', '=', 'messages.user_id')
+        // ->where('users.id', '=', $id)
+        // ->get(['users.*', 'messages.message', 'messages.created_at']);
+
+        // $data = Message::find($id)->where('user_id', '=', $id)->get();
+
+        $data = Message::find($id)
+                    ->join('users', 'users.id', '=', 'messages.user_id')
+                    ->where('user_id', '=', $id)
+                    ->get();
+
+
+
+        return $data;
+    }
 
     /**
      * Display a listing of the resource.
@@ -99,13 +129,12 @@ class ChatController extends Controller
 
         $user = User::find($id);
 
-        $data = User::join('messages', 'users.id', '=', 'messages.user_id')
-        ->where('users.id', '=', $id)
-        ->get(['users.*', 'messages.message', 'messages.created_at']);
+        // $data = Message::find($id)->where('user_id', '=', $id)->get();
+        $data = $this->getUserMessage($id);
 
-        $adminMessage = User::join('messages', 'users.id', '=', 'messages.reciever')
-        ->where('messages.reciever', '=', $id)
-        ->get(['messages.*']);
+
+        // $adminMessage = Message::find($id)->where('messages.reciever', '=', $id)->get();
+        $adminMessage= $this->getAdminMessage($id);
 
         // echo $adminMessage;
         // echo $data;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,19 +26,33 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function getUserInfo(){
+        $userInfo = Auth::user();
+
+        return $userInfo;
+    }
+
+    public function getUserMessage(){
+        $userInfo = Auth::user();
+        $userID = $userInfo->id;
+        $data = Message::find($userID)->where('user_id', '=', $userID)->get();
+
+        return $data;
+
+    }
+
+
     public function index()
     {
-        $userInfo = Auth::user();
         $number = 1;
 
-        // echo $userInfo;
-        $userID = $userInfo->id;
+        $userInfo = $this->getUserInfo();
 
-          $data = User::join('messages', 'users.id', '=', 'messages.user_id')
-          ->where('users.id', '=', $userID)
-        ->get(['messages.*']);
+        $data = $this->getUserMessage();
 
         // echo $data;
+        // dd($data);
 
         return view('home',[
             'user' => $userInfo,
@@ -48,20 +63,15 @@ class HomeController extends Controller
 
     public function message()
     {
-        $userInfo = Auth::user();
+        $userInfo = $this->getUserInfo();
+
         $number = 1;
 
-
         // echo $userInfo;
-        $userID = $userInfo->id;
 
-          $data = User::join('messages', 'users.id', '=', 'messages.user_id')
-          ->where('users.id', '=', $userID)
-        ->get(['messages.*']);
+        $data = Message::find($userInfo->id)->where('user_id', '=', $userInfo->id)->get();
 
-        $adminMessage = User::join('messages', 'users.id', '=', 'messages.reciever')
-        ->where('messages.reciever', '=', $userID)
-        ->get(['messages.*']);
+        $adminMessage = Message::find($userInfo->id)->where('messages.reciever', '=', $userInfo->id)->get();
 
         // echo $adminMessage;
 
